@@ -1,7 +1,7 @@
 package com.datingapp.flamebot.controller;
 
+import com.datingapp.flamebot.model.ChatResponse;
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,7 +17,7 @@ public class ChatController {
     }
 
     @GetMapping("/rizz-me-up")
-    public String getRizzedUp(@RequestParam String message) {
+    public ChatResponse getRizzedUp(@RequestParam String message) {
         String systemInstruction = """
                 You are a chatbot designed exclusively to help users craft charming, flirty, seductive, or romantic messages for dating apps and online interactions. 
                 Your responses should focus only on dating-related content, such as witty icebreakers, flirtatious replies, sexy banter, compliments, or 
@@ -32,7 +32,7 @@ public class ChatController {
                 .user(message)
                 .system(systemInstruction)
                 .call()
-                .content();
+                .entity(ChatResponse.class);
     }
 
     @GetMapping("/stream")
@@ -44,7 +44,7 @@ public class ChatController {
     }
 
     @GetMapping("/json")
-    public ChatResponse chatResponse(@RequestParam String message) {
+    public org.springframework.ai.chat.model.ChatResponse chatResponse(@RequestParam String message) {
         return chatClient
                 .prompt(message)
                 .call()
